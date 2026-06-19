@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>미국주식 기대수익률 계산기</title>
+  <meta name="description" content="사용자가 입력한 성장률, PER, 배당수익률 가정을 바탕으로 미국주식의 예상 연복리 수익률과 복리 결과를 계산합니다.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#174ea6">
+  <link rel="canonical" href="https://example.com/calculator.html">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="미국주식 기대수익률 계산기">
+  <meta property="og:title" content="미국주식 기대수익률 계산기">
+  <meta property="og:description" content="성장률과 미래 PER 가정으로 보수적·기준·낙관적 시나리오를 비교합니다.">
+  <meta property="og:url" content="https://example.com/calculator.html">
+  <meta property="og:image" content="https://example.com/assets/illustration-stock-calculator.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="900">
+  <meta property="og:image:height" content="900">
+  <meta property="og:image:alt" content="계산기와 동전, 성장 그래프 일러스트">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="미국주식 기대수익률 계산기">
+  <meta name="twitter:description" content="성장률과 미래 PER 가정으로 보수적·기준·낙관적 시나리오를 비교합니다.">
+  <meta name="twitter:image" content="https://example.com/assets/illustration-stock-calculator.jpg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">미국주식 기대수익률 계산기</a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="index.html">홈</a>
+        <a href="calculator.html" aria-current="page">미국주식 계산기</a>
+        <a href="compound.html">복리 계산기</a>
+        <a href="learn.html">투자 기초</a>
+        <a href="about.html">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <header class="page-header">
+      <div class="container page-header-grid">
+        <div class="page-header-copy">
+          <p class="eyebrow">교육용 시나리오 분석</p>
+          <h1>미국주식 기대수익률 계산기</h1>
+          <p>이 계산기는 특정 종목의 미래 수익률을 예측하거나 매수·매도 판단을 대신해주는 도구가 아닙니다. 사용자가 직접 입력한 성장률, 미래 PER, 배당수익률을 기준으로 가능한 시나리오를 계산합니다.</p>
+        </div>
+        <div class="page-illustration-frame">
+          <img class="page-illustration" src="assets/illustration-stock-calculator.jpg" width="900" height="900" alt="계산기와 동전, 성장 그래프 일러스트" decoding="async">
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container calculator-layout">
+        <form id="stock-calculator-form" novalidate>
+          <section class="panel" aria-labelledby="basic-input-title">
+            <div class="panel-header">
+              <div>
+                <h2 id="basic-input-title">기본 투자 정보</h2>
+                <p class="muted">현재 확인할 수 있는 값과 투자 계획을 입력하세요.</p>
+              </div>
+            </div>
+            <div class="input-grid">
+              <div class="field">
+                <label for="ticker">종목 티커</label>
+                <input id="ticker" name="ticker" type="text" value="AAPL" maxlength="12" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="current-price">현재 주가 (USD)</label>
+                <input id="current-price" name="current-price" type="number" value="200" min="0.01" step="0.01" inputmode="decimal">
+              </div>
+              <div class="field">
+                <label for="current-eps">현재 EPS (USD)</label>
+                <input id="current-eps" name="current-eps" type="number" value="6.50" min="0" step="0.01" inputmode="decimal">
+              </div>
+              <div class="field">
+                <label for="investment-years">투자 기간 (년)</label>
+                <input id="investment-years" name="investment-years" type="number" value="5" min="1" max="50" step="1" inputmode="numeric">
+              </div>
+              <div class="field">
+                <label for="current-per">현재 PER</label>
+                <input id="current-per" name="current-per" type="text" readonly aria-describedby="current-per-help">
+                <small id="current-per-help">현재 주가 ÷ 현재 EPS로 자동 계산됩니다.</small>
+              </div>
+              <div class="field">
+                <label for="investment-currency">투자금 통화</label>
+                <select id="investment-currency" name="investment-currency">
+                  <option value="USD" selected>달러 (USD)</option>
+                  <option value="KRW">원화 (KRW)</option>
+                </select>
+                <small>주가와 EPS는 USD로 유지되며, 투자금과 평가금액에 선택 통화를 적용합니다.</small>
+              </div>
+              <div class="field">
+                <label for="initial-investment">초기 투자금 (<span data-investment-currency>USD</span>)</label>
+                <input id="initial-investment" name="initial-investment" type="number" value="10000" min="0" step="100" inputmode="decimal">
+              </div>
+              <div class="field">
+                <label for="monthly-contribution">월 추가 투자금 (<span data-investment-currency>USD</span>)</label>
+                <input id="monthly-contribution" name="monthly-contribution" type="number" value="500" min="0" step="10" inputmode="decimal">
+              </div>
+            </div>
+          </section>
+
+          <section class="panel spacer-top" aria-labelledby="scenario-input-title">
+            <div class="panel-header">
+              <div>
+                <h2 id="scenario-input-title">시나리오 가정</h2>
+                <p class="muted">각 값은 연간 기준입니다. 서로 다른 가정을 입력해 결과 범위를 비교하세요.</p>
+              </div>
+            </div>
+            <div class="scenario-grid">
+              <fieldset class="scenario-card bear">
+                <legend class="sr-only">보수적 시나리오 입력</legend>
+                <h3>보수적 시나리오</h3>
+                <div class="field">
+                  <label for="bear-growth">연간 EPS 성장률 (%)</label>
+                  <input id="bear-growth" type="number" value="3" min="-100" max="200" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bear-per">미래 PER (배)</label>
+                  <input id="bear-per" type="number" value="15" min="0" max="200" step="0.5" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bear-dividend">배당수익률 (%)</label>
+                  <input id="bear-dividend" type="number" value="1" min="0" max="30" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bear-buyback">자사주매입 효과 (%)</label>
+                  <input id="bear-buyback" type="number" value="0" min="-20" max="20" step="0.1" inputmode="decimal">
+                </div>
+              </fieldset>
+
+              <fieldset class="scenario-card base">
+                <legend class="sr-only">기준 시나리오 입력</legend>
+                <h3>기준 시나리오</h3>
+                <div class="field">
+                  <label for="base-growth">연간 EPS 성장률 (%)</label>
+                  <input id="base-growth" type="number" value="8" min="-100" max="200" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="base-per">미래 PER (배)</label>
+                  <input id="base-per" type="number" value="22" min="0" max="200" step="0.5" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="base-dividend">배당수익률 (%)</label>
+                  <input id="base-dividend" type="number" value="1" min="0" max="30" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="base-buyback">자사주매입 효과 (%)</label>
+                  <input id="base-buyback" type="number" value="1" min="-20" max="20" step="0.1" inputmode="decimal">
+                </div>
+              </fieldset>
+
+              <fieldset class="scenario-card bull">
+                <legend class="sr-only">낙관적 시나리오 입력</legend>
+                <h3>낙관적 시나리오</h3>
+                <div class="field">
+                  <label for="bull-growth">연간 EPS 성장률 (%)</label>
+                  <input id="bull-growth" type="number" value="15" min="-100" max="200" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bull-per">미래 PER (배)</label>
+                  <input id="bull-per" type="number" value="35" min="0" max="200" step="0.5" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bull-dividend">배당수익률 (%)</label>
+                  <input id="bull-dividend" type="number" value="0.5" min="0" max="30" step="0.1" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="bull-buyback">자사주매입 효과 (%)</label>
+                  <input id="bull-buyback" type="number" value="1.5" min="-20" max="20" step="0.1" inputmode="decimal">
+                </div>
+              </fieldset>
+            </div>
+          </section>
+        </form>
+
+        <section class="panel" aria-labelledby="result-title">
+          <div class="panel-header">
+            <div>
+              <h2 id="result-title">교육용 계산 결과</h2>
+              <p class="muted">모든 수치는 입력한 가정 기준의 시나리오 예상값입니다.</p>
+            </div>
+          </div>
+          <p id="calculation-status" class="sr-only" aria-live="polite"></p>
+          <div class="table-scroll" tabindex="0" aria-label="시나리오별 계산 결과 표">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th scope="col">항목</th>
+                  <th scope="col" data-column="bear">보수적</th>
+                  <th scope="col" data-column="base">기준</th>
+                  <th scope="col" data-column="bull">낙관적</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">미래 EPS</th><td data-result="bear-future-eps" data-column="bear">—</td><td data-result="base-future-eps" data-column="base">—</td><td data-result="bull-future-eps" data-column="bull">—</td></tr>
+                <tr><th scope="row">예상 미래 주가</th><td data-result="bear-future-price" data-column="bear">—</td><td data-result="base-future-price" data-column="base">—</td><td data-result="bull-future-price" data-column="bull">—</td></tr>
+                <tr><th scope="row">상승/하락 여력</th><td data-result="bear-upside" data-column="bear">—</td><td data-result="base-upside" data-column="base">—</td><td data-result="bull-upside" data-column="bull">—</td></tr>
+                <tr><th scope="row">예상 연복리 수익률</th><td data-result="bear-annual-return" data-column="bear">—</td><td data-result="base-annual-return" data-column="base">—</td><td data-result="bull-annual-return" data-column="bull">—</td></tr>
+                <tr><th scope="row">총 투자원금</th><td data-result="bear-principal" data-column="bear">—</td><td data-result="base-principal" data-column="base">—</td><td data-result="bull-principal" data-column="bull">—</td></tr>
+                <tr><th scope="row">예상 미래 평가금액</th><td data-result="bear-future-value" data-column="bear">—</td><td data-result="base-future-value" data-column="base">—</td><td data-result="bull-future-value" data-column="bull">—</td></tr>
+                <tr><th scope="row">예상 수익</th><td data-result="bear-profit" data-column="bear">—</td><td data-result="base-profit" data-column="base">—</td><td data-result="bull-profit" data-column="bull">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="interpretation">
+            <strong>기준 시나리오 해석</strong>
+            <p id="base-interpretation">입력값을 계산하고 있습니다.</p>
+          </div>
+          <div class="warning-box">
+            <strong>주의</strong>
+            성장률이나 미래 PER을 조금만 다르게 입력해도 결과가 크게 달라질 수 있습니다. 통화 선택은 환율을 변환하지 않으며 환율 변동도 반영하지 않습니다. 이 계산기는 교육용 시나리오 분석 도구이며, 실제 시장 수익률을 예측하거나 보장하지 않습니다.
+          </div>
+        </section>
+
+        <div class="ad-placeholder" role="complementary" aria-label="광고 자리표시">광고 영역</div>
+
+        <section class="panel" aria-labelledby="sensitivity-title">
+          <div class="panel-header">
+            <div>
+              <h2 id="sensitivity-title">밸류에이션 민감도 분석</h2>
+              <p class="muted">아래 표는 EPS 성장률과 미래 PER이 달라질 때 예상 연복리 수익률이 어떻게 바뀌는지 보여줍니다.</p>
+            </div>
+          </div>
+          <div class="table-scroll" tabindex="0" aria-label="밸류에이션 민감도 표">
+            <table class="sensitivity-table">
+              <thead>
+                <tr>
+                  <th scope="col">EPS 성장률 / 미래 PER</th>
+                  <th scope="col">10배</th>
+                  <th scope="col">15배</th>
+                  <th scope="col">20배</th>
+                  <th scope="col">25배</th>
+                  <th scope="col">30배</th>
+                  <th scope="col">40배</th>
+                </tr>
+              </thead>
+              <tbody id="sensitivity-body"></tbody>
+            </table>
+          </div>
+          <p class="muted spacer-top">민감도 표에는 기준 시나리오의 배당수익률과 자사주매입 효과가 함께 반영됩니다.</p>
+        </section>
+
+        <section aria-labelledby="education-title">
+          <div class="section-heading">
+            <h2 id="education-title">계산에 사용되는 핵심 개념</h2>
+          </div>
+          <div class="card-grid two">
+            <article class="card">
+              <h3>EPS란 무엇인가요?</h3>
+              <p>EPS는 주당순이익으로, 기업이 벌어들인 순이익을 주식 수로 나눈 값입니다. 이익이 늘거나 발행 주식 수가 줄면 EPS가 높아질 수 있습니다.</p>
+            </article>
+            <article class="card">
+              <h3>PER이란 무엇인가요?</h3>
+              <p>PER은 주가를 EPS로 나눈 값입니다. 시장이 기업의 이익 1달러에 몇 배의 가격을 지불하는지 보여주는 대표적인 밸류에이션 지표입니다.</p>
+            </article>
+            <article class="card">
+              <h3>미래 PER이 중요한 이유</h3>
+              <p>미래 주가는 미래 EPS와 미래 PER의 곱으로 단순화할 수 있습니다. 이익이 성장해도 시장의 평가 배수가 낮아지면 기대수익률이 줄어들 수 있습니다.</p>
+            </article>
+            <article class="card">
+              <h3>좋은 회사도 비싸게 사면 수익률이 낮을 수 있는 이유</h3>
+              <p>현재 가격에 이미 높은 성장 기대가 반영돼 있다면 실제 실적이 좋아도 추가 상승 여력이 제한될 수 있습니다. 기업의 질과 지불 가격을 함께 살펴야 합니다.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div><p class="footer-brand">미국주식 기대수익률 계산기</p><p class="footer-copy">한국 투자자를 위한 교육용 시나리오 계산 도구입니다. 계산 결과는 투자 조언이나 수익 보장이 아닙니다.</p></div>
+        <nav class="footer-links" aria-label="정책 메뉴"><a href="disclaimer.html">투자 유의사항</a><a href="privacy.html">개인정보 처리방침</a><a href="terms.html">이용약관</a><a href="contact.html">문의하기</a></nav>
+      </div>
+      <div class="footer-bottom">© 2026 미국주식 기대수익률 계산기. 교육 및 정보 제공 목적.</div>
+    </div>
+  </footer>
+  <script src="js/utils.js"></script>
+  <script src="js/stock-calculator.js"></script>
+</body>
+</html>
