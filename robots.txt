@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://us-stock-compound-calculator.pages.dev/sitemap.xml
